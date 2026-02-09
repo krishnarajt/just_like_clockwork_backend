@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: just-like-clockwork-backend
+    namespace: argocd
+spec:
+    project: default
+    source:
+        repoURL: https://github.com/krishnarajt/just_like_clockwork_backend
+        targetRevision: main
+        path: k8s/overlays/prod
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: just-like-clockwork-backend
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true
