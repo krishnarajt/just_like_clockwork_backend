@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/krishnarajt/just-like-clockwork-backend:latest
+          image: ghcr.io/krishnarajt/just-like-clockwork-backend:git-2bdab8e4a5e1b5f79002f1de8c9080455114f3c3
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
