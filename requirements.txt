@@ -21,4 +21,4 @@ pydantic-settings==2.1.0
 python-dotenv==1.0.0
 
 # For production
-gunicorn==21.2.0
+gunicorn==22.0.0
