@@ -52,9 +52,29 @@ Backend API for Just Like Clockwork time tracking application.
 
 1. **Install dependencies**: `pip install -r requirements.txt`
 2. **Configure environment**: Copy `.env.example` to `.env` and update values
-3. **Run application**: `python main.py`
+3. **Run database migrations**: `alembic upgrade head`
+4. **Run application**: `python main.py`
 
 API documentation available at: `http://localhost:8000/docs`
+
+## Database Migrations
+
+This project uses Alembic for schema migrations:
+
+```bash
+alembic upgrade head
+```
+
+The first migration is intentionally non-destructive. It can create the current
+schema for a fresh database, and it can adopt a database that was previously
+created by `Base.metadata.create_all()` without dropping existing data. Its
+rollback is a no-op by design, so migration rollback cannot delete production
+tables.
+
+For existing production databases, take a backup before any migration and run
+the migration in staging first. If the app must run migrations at startup, set
+`USE_ALEMBIC_MIGRATIONS=true`; otherwise the app keeps the historical
+`create_all()` startup fallback for compatibility.
 
 ## Kubernetes Deployment
 
@@ -74,6 +94,7 @@ Required secrets:
 
 ```bash
 kubectl create namespace just-like-clockwork-backend
+alembic upgrade head
 kubectl apply -k k8s/overlays/prod
 ```
 

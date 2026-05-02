@@ -35,31 +35,62 @@ class RefreshResponse(BaseModel):
 
 class CreateSessionRequest(BaseModel):
     """Schema for creating a new session"""
+    sessionUuid: Optional[str] = None
     sessionName: Optional[str] = None
     description: Optional[str] = None
     startedAt: Optional[str] = None  # ISO datetime string or locale string
+    endedAt: Optional[str] = None
+    totalDuration: Optional[int] = None  # Total seconds
+    totalAmount: Optional[float] = None
+    isCompleted: Optional[bool] = None
 
 
 class UpdateSessionRequest(BaseModel):
     """Schema for updating a session"""
     sessionName: Optional[str] = None
     description: Optional[str] = None
+    startedAt: Optional[str] = None
     endedAt: Optional[str] = None  # ISO datetime string
     totalDuration: Optional[int] = None  # Total seconds
+    totalAmount: Optional[float] = None
     isCompleted: Optional[bool] = None
 
 
 class CreateLapRequest(BaseModel):
     """Schema for creating a lap in a session"""
+    lapUuid: Optional[str] = None
     lapName: Optional[str] = None
+    workDoneString: Optional[str] = None
     startedAt: Optional[str] = None  # ISO datetime string
+    endedAt: Optional[str] = None
+    duration: Optional[int] = None
+    current_hours: Optional[int] = None
+    current_minutes: Optional[int] = None
+    current_seconds: Optional[int] = None
+    currentHours: Optional[int] = None
+    currentMinutes: Optional[int] = None
+    currentSeconds: Optional[int] = None
+    isBreakLap: Optional[bool] = None
+    hourlyAmount: Optional[float] = None
+    HourlyAmount: Optional[float] = None
 
 
 class UpdateLapRequest(BaseModel):
     """Schema for updating a lap"""
     lapName: Optional[str] = None
+    workDoneString: Optional[str] = None
+    startedAt: Optional[str] = None
     endedAt: Optional[str] = None
     duration: Optional[int] = None  # Total seconds
+    current_hours: Optional[int] = None
+    current_minutes: Optional[int] = None
+    current_seconds: Optional[int] = None
+    currentHours: Optional[int] = None
+    currentMinutes: Optional[int] = None
+    currentSeconds: Optional[int] = None
+    isBreakLap: Optional[bool] = None
+    hourlyAmount: Optional[float] = None
+    HourlyAmount: Optional[float] = None
 
 
 # --- Bulk session create (frontend sends all laps at once when stopping) ---
@@ -105,11 +136,17 @@ class LapResponse(BaseModel):
     lapUuid: str
     lapNumber: int
     lapName: Optional[str] = None
+    workDoneString: Optional[str] = None
     startedAt: Optional[str] = None
     endedAt: Optional[str] = None
     duration: Optional[int] = None
+    currentHours: int = 0
+    currentMinutes: int = 0
+    currentSeconds: int = 0
     isActive: bool = False
-    images: List[ImageResponseItem] = []
+    isBreakLap: bool = False
+    hourlyAmount: float = 0.0
+    images: List[ImageResponseItem] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
@@ -123,12 +160,15 @@ class SessionResponse(BaseModel):
     description: Optional[str] = None
     startedAt: Optional[str] = None
     endedAt: Optional[str] = None
+    lapCount: int = 0
+    totalSeconds: Optional[int] = None
     totalDuration: Optional[int] = None
+    totalAmount: float = 0.0
     isActive: bool = False
     isCompleted: bool = False
     createdAt: Optional[str] = None
     updatedAt: Optional[str] = None
-    laps: List[LapResponse] = []
+    laps: List[LapResponse] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
@@ -142,7 +182,10 @@ class SessionListResponse(BaseModel):
     description: Optional[str] = None
     startedAt: Optional[str] = None
     endedAt: Optional[str] = None
+    lapCount: int = 0
+    totalSeconds: Optional[int] = None
     totalDuration: Optional[int] = None
+    totalAmount: float = 0.0
     isActive: bool = False
     isCompleted: bool = False
     createdAt: Optional[str] = None
